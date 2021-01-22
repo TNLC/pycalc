@@ -16,6 +16,35 @@ def split_str(eingabe:str):
     zahlen.append(float(temp))
     return zahlen, operatoren
 
+
+def calculate(zahlen, operatoren):
+    a = 0
+    while a < len(operatoren):
+        if a == 0:
+            if operatoren[a] == '+':
+                b = zahlen[0] + zahlen[1]
+            elif operatoren[a] == '-':
+                b = zahlen[0] - zahlen[1]
+            elif operatoren[a] == '*':
+                b = zahlen[0] * zahlen[1]
+            elif operatoren[a] == '/':
+                b = zahlen[0] / zahlen[1]
+        else:
+            if operatoren[a] == '+':
+                b = b + zahlen[a+1]
+            elif operatoren[a] == '-':
+                b = b - zahlen[a+1]
+            elif operatoren[a] == '*':
+                b = b * zahlen[a+1]
+            elif operatoren[a] == '/':
+                b = b / zahlen[a+1]
+            
+        a = a + 1
+    
+    return b       
+
+
+
 if __name__ == '__main__':
     variablen = {
         'pi': math.pi,
@@ -35,3 +64,6 @@ if __name__ == '__main__':
         print(f'{zahlen=}')
         print(f'{operatoren=}')
 
+        ergebnis = calculate(zahlen, operatoren)
+
+        print(f'{ergebnis=}')
