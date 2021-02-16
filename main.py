@@ -52,7 +52,7 @@ def calculate(zahlen, operatoren):
             if offene_klammern == 0:
                 # ZAHLEN ABGREIFEN
                 klammer_zahlen = []
-                for n in range(klammer_index, x - klammer_anzahl - 2):
+                for n in range(klammer_index, x - klammer_anzahl + 2):
                     klammer_zahlen.append(zahlen[n])
 
                 # OPERATOREN ABGREIFEN
@@ -66,6 +66,9 @@ def calculate(zahlen, operatoren):
                 # BEREITS BERECHNETES LÖSCHEN
                 del zahlen[klammer_index:x]
                 del operatoren[klammer_index:x+1]
+
+                print(f'del: {zahlen=}')
+                print(f'del: {operatoren=}')
                 
                 # ERGEBNIS IN ZAHLEN EINFÜGEN
                 zahlen.insert(klammer_index, klammer_ergebnis)
