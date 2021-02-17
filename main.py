@@ -1,48 +1,59 @@
 import math
 
+ZIFFERN = '0123456789.'
+OPERATOREN = '+-*/()'
+
 # String auflösen (in Bestandteile)
 def split_str(eingabe:str):
+    a = 0
+    while a < len(eingabe):
+        if a != 0 and eingabe[a] == '(':
+            if eingabe[a-1] in ZIFFERN:
+                eingabe = eingabe[:a] + '*' + eingabe[a:]
+                a = a + 1
+        elif a != len(eingabe) - 1 and eingabe[a] == ')':
+            if eingabe[a+1] in ZIFFERN + '(':
+                eingabe = eingabe[:a+1] + '*' + eingabe[a+1:]
+                a = a + 1
+        a = a + 1
+
+    print(f'{eingabe=}')
+
     temp = ''
     zahlen = []
     operatoren = []
     for buchstabe in eingabe:
-        if buchstabe in '+-*/()':
+        if buchstabe in OPERATOREN:
             operatoren.append(buchstabe)
             if len(temp) > 0:
                 zahlen.append(float(temp))
                 temp = ''
-        elif buchstabe not in '0123456789.':
+        elif buchstabe not in ZIFFERN:
             raise(Exception('Ungültige Eingabe!'))
         else: temp += buchstabe
     if eingabe[-1] != ')': zahlen.append(float(temp))
     return zahlen, operatoren
 
-# ['+', '-', '(', '+', ')', '*']
-# [1, 2, 3, 4, 5]
-# ['+', '-', '*']
-# [1, 2, 7, 5]
-# ['+', '-']
-# [1, 2, 35]
-# -32
 
 # Rechnen
 # Punkt vor Strich mit Klammern
 def calculate(zahlen, operatoren):
-    print(f'{zahlen=}')
-    print(f'{operatoren=}')
+    print(f'vor klammern: {zahlen=}')
+    print(f'vor klammern: {operatoren=}')
+
     # KLAMMERN
-    klammer_anzahl = 0
-    for operator in operatoren: 
-        if operator in '()': klammer_anzahl += 1
     klammer_index = None
     offene_klammern = 0
     erste_klammer_offen = False
+    andere_klammern = 0
     x = 0
     while x < len(operatoren):
         if operatoren[x] == "(":
             if not erste_klammer_offen:
+                andere_klammern = 0
                 klammer_index = x
                 erste_klammer_offen = True
+            else: andere_klammern += 1
             offene_klammern = offene_klammern + 1
         
         elif operatoren[x] == ")":
@@ -50,9 +61,10 @@ def calculate(zahlen, operatoren):
                 raise(Exception('Ungültige Eingabe!'))
             offene_klammern = offene_klammern - 1
             if offene_klammern == 0:
+                erste_klammer_offen = False
                 # ZAHLEN ABGREIFEN
                 klammer_zahlen = []
-                for n in range(klammer_index, x - klammer_anzahl + 2):
+                for n in range(klammer_index, x - andere_klammern):
                     klammer_zahlen.append(zahlen[n])
 
                 # OPERATOREN ABGREIFEN
@@ -66,14 +78,16 @@ def calculate(zahlen, operatoren):
                 # BEREITS BERECHNETES LÖSCHEN
                 del zahlen[klammer_index:x]
                 del operatoren[klammer_index:x+1]
-
-                print(f'del: {zahlen=}')
-                print(f'del: {operatoren=}')
-                
+                               
                 # ERGEBNIS IN ZAHLEN EINFÜGEN
                 zahlen.insert(klammer_index, klammer_ergebnis)
+            
+            else: andere_klammern += 1
 
         x = x + 1
+    
+    print(f'nach klammern: {zahlen=}')
+    print(f'nach klammern: {operatoren=}')
 
     # MULTIPLIZIEREN UND DIVIDIEREN
     neueZahlen = []
@@ -107,8 +121,6 @@ def calculate(zahlen, operatoren):
         i = i + 1
     
     # ADDIEREN UND SUBTRAHIEREN
-    print(f'{neueOperatoren=}')
-    print(f'{neueZahlen=}')
     a = 0
     b = None
     while a < len(neueOperatoren):
@@ -152,6 +164,6 @@ if __name__ == '__main__':
             continue
         
         ergebnis = calculate(zahlen, operatoren)
-        print(f'{ergebnis=}')
+        print(ergebnis)
 
         
