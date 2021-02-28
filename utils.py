@@ -24,7 +24,7 @@ def build_lexer():
     lexer_generator.add('EXP', r'^|\*\*')    # 'EXP' => EXPONENTIATE
 
     lexer_generator.add('BR_O', r'\(')  # 'BR_O' => BRACKET OPEN
-    lexer_generator.add('BR_C', r'\(')  # 'BR_O' => BRACKET CLOSE
+    lexer_generator.add('BR_C', r'\)')  # 'BR_C' => BRACKET CLOSE
     lexer_generator.add('ABS_P', r'\|') # 'ABS_P' => ABSOLUTE PART
 
     # LEXER ERSTELLEN UND ZURÜCKGEBEN
